@@ -1,0 +1,93 @@
+<html>
+<head>
+<title>Layout Template - Read Me</title>
+<style>
+.selector{color:red;}
+.heading{
+  background-color:#D8E0E2;
+  background-repeat:repeat-x;
+  border-bottom:1px solid #FFFFFF;
+  border-top:1px solid #FFFFFF;
+  color:black;
+  font-family:Verdana,Arial,Helvetica,sans-serif;
+  font-size:16px;
+  font-weight:bold;
+  letter-spacing:1.1px;
+  margin:15px 0 10px;
+  padding:3px 10px;
+  text-align:center;
+}
+</style>
+</head>
+<body>
+<a name="top"></a>
+<p>This template provides a starting point for creating your Web application. This easily configurable template allows you to define the map, title and links for the site. This read-me file explains how to setup and configure the template to run on your web server.</p>
+<div class="heading">Table of Contents</div>
+<ul>
+<li><a href="#deploy">Install the Web application</a></li>
+<li><a href="#configure">Configure the application</a></li>
+<li><a href="#options">Specify map options</a></li>
+</ul>
+<a name="deploy"></a>
+<h3 class="heading">Install the Web application</h3>
+<p>These instructions assume that you have a Web server like <a href="http://www.iis.net/">Internet Information Services(IIS)</a> installed and setup on your machine. If you are using another Web server the general installation steps will be the same but you will need to check your Web server's documentation for specific information on deploying and testing the application.
+
+<ol>
+  <li>Copy the contents of the zip file into your web server's root directory. In IIS, the default location for the web server's root folder is <code>c:\inetpub\wwwroot</code>. </li>
+  <li>If your application edits features in a feature service, enables the elevation chart, contains secure services or web maps that aren't publicly shared or generates requests that exceed 2000 characters you may need to 
+setup and use a proxy page. Common situations where you may exceed the URL length are, using complext polygons as input to a task or specifying a spatial reference using well-known text (wkt).
+View the <a href="http://help.arcgis.com/EN/webapi/javascript/arcgis/help/jshelp_start.htm#jshelp/ags_proxy.htm">Using the proxy page</a> help topic for details on installing and configuring a proxy page. After setting up the proxy set the proxyUrl option in index.html to point to your proxy. </li>
+  
+ <li> Test the page using the following URL: http://localhost/[template name]/index.html, where [template name] is the name of the folder where you extracted the zip contents.
+ </li>
+</ol>
+<a href="#top">Top</a>
+<a name="configure"></a>
+<h3  class="heading">Configure the application</h3>
+<p>Now let's configure the application to use a different map, title or subtitle.
+ <ol>
+    <li>Every saved map on ArcGIS.com  has a unique identifier. To find the map id, navigate to <a href="http://www.arcgis.com/">ArcGIS.com</a>, and find the map you want to display. If it is one of your maps, make sure it's shared with everyone (public). View the map details and copy the ID from the URL in the top of your browser. The section you need to copy is highlighted in yellow in the image below.</li><br />
+    <img src="documentation/findmapid.png"/><br /><br />
+    <li>Open the index.html file in a text editor. You can edit this file to set the following application properties:
+<ul>
+  <li><b>webmap:</b>unique identifier for the ArcGIS.com map.</li>
+  <li><b>title:</b>if not specified the ArcGIS.com map's title is used</li> 
+  <li><b>description:</b> By default the application uses the description for the web map from ArcGIS.com. Add custom text here if you want to replace the default description.
+  <li><b>bingMapsKey:</b>if the map uses data from Bing Maps, enter your Bing Maps Key</li> 
+  <li><b>Links:</b> The configuration file allows you to specify the text and url for two links (link1 and link2) that appear in the upper right corner of the application. Specify the link url and the link text to change the link.</li>
+  <li><b>Theme:</b> Specify a color theme for the application. Valid values are: gray|purple|blue|green|orange.</li>
+  <li><b>bitlyUrl</b> The application using the bitly service to create a short url to use when sharing links to the application via twitter, email and facebook. If you want to use
+  this service you will need to sign up for a key and login at <a target="_blank" href="http://bitly.com/a/sign_up?rd=/pages/tools">bitly.com</a>. Once you have the login and key enter your values here.
+</li>
+<li><b>basemapgroup:</b> Specify the title and owner of an ArcGIS Online group that contains the basemaps to display in the Basemap Gallery. The Basemap Gallery lets users of the application choose a new basemap for the current map. All operational layers will persist - only the basemap will change.  </li>
+</ul><br />
+ <li>To modify the map, replace the string for webmap with your map's id.</li>
+<pre>
+function init(){
+  //The ID for the map from ArcGIS.com
+  webmap =  "<span class="selector">dbd1c6d52f4e447f8c01d14a691a70fe</span>";
+</pre>
+ <li>If your map contains data from Bing Maps, enter your <a href="http://help.arcgis.com/en/webapi/javascript/arcgis/help/jshelp_start.htm#jshelp/ve_getting_started.htm">Bing Maps key</a>.
+ <pre>
+bingMapsKey = "<span class="selector">Enter your Bing Maps Key here</span>";
+ </pre></li>
+ <li>By default, the application displays the ArcGIS.com map's title as the applications title and the map's summary as the subtitle. You can change this by setting the title and subtitle properties.</li>
+ <pre>
+    title = "<span class="selector">This is a custom title for your map</span>";
+    subtitle = "<span class="selector">This is a custom subtitle</span>";
+ </pre>
+ <li>Save the file then test your application and note that it now displays your map and if specified your custom title and subtitle.</li>
+ </ol>
+</p>
+
+<a href="#top">Top</a>
+<a name="options"></a>
+<h4 class="heading">Specify Map Options</h4>
+<p>When creating a new map you can specify optional parameters that define various map options like whether pan arrows or a slider are displayed, if popups defined in ArcGIS.com display and if the map supports 
+continous pan across the dateline. View the API reference for the <a href="http://help.arcgis.com/EN/webapi/javascript/arcgis/help/jsapi_start.htm#jsapi/map.htm">Map</a> class for more details.  Note: continous pan across the dateline is only supported if the map's spatial reference is WGS84 or Web Mercator. </p><p>To change the map options in your application open the layout.js file
+search for mapOptions then add or remove map options. In this example, we turn off the map slider, display the pan arrows and enable support for continous pan across the dateline.
+<pre>
+
+
+</body>
+</html>

@@ -1,0 +1,96 @@
+<html>
+<head><title>Terms and Conditions</title>
+  <style type="text/css">
+    body {
+       text-align:left;
+       width:90%;
+       height:auto;
+       padding:50px;
+       font-size:28px;
+       /* font-size:3em; */
+    }
+
+    h1 {
+         font-size:32px;
+      /* font-size:1.3em; */
+    }
+
+    h2 {
+         font-size:30px;
+      /* font-size:1.2em; */
+    }
+
+    h3 {
+         font-size:28px;
+      /* font-size:1em; */
+    }
+
+  </style>
+
+  <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+
+  <script type="text/javascript">
+    function setCookie(key, value) {
+       var expires = new Date();
+       expires.setTime(expires.getTime() + 2592000000); //30 days
+       document.cookie = key + '=' + value + ';expires=' + expires.toUTCString();
+       }
+
+    $(document).ready(function() {
+
+      $('#continue').click(function() {
+        setCookie('ArcGIS Online JavaScript Map Viewer', '1');
+        document.location = "mobile.html" + window.location.search;
+        return false;
+      });
+    });
+  </script>
+
+</head>
+<body >
+<div >
+<h1>Welcome to the Hamilton City Council Rates Viewer.</h1>
+<p>This is one of a number of focused GIS viewers that are provided by Hamilton City Council.</p>
+<p>Other viewers are located on relevant pages of the Hamilton Website; alternatively all viewers are accessible form the Main GIS Page.</p>
+<p>Hamilton City Council GIS Viewers are offered as a free service. Use of this service to retrieve information constitutes your awareness and agreement to the following conditions of use.</p>
+    <h2>Conditions of Use</h2>
+    <h3>Liability</h3>
+<ol>
+  <li>Use of this viewer is entirely at the risk of the user.</li>
+  <li>Hamilton City Council (the Council) and its employees, while providing this information in good faith, accept no responsibility or liability for any loss, damage, injury, or loss in value to any person, property, service or otherwise resulting from its use.</li>
+  <li>The preparation and provision of the information has been made in good faith from a number of sources. While all due care has been taken, the Council does not give any warranty in regard to the availability, accuracy, completeness, currency or reliability of the information.</li>
+</ol>
+    <h3>Accuracy</h3>
+<ol>
+  <li>The GIS data represented within these viewers may not be an accurate, complete or correct representation of the features depicted.</li>
+</ol>
+    <h3>Intellectual Property</h3>
+<ol>
+  <li>Boundary information is derived under licence from LINZ Digital Cadastral Database (Crown Copyright Reserved).</li>
+  <li>Rating and valuation information contained in this website is restricted to the information that is required to be made available to the general public according to the Local Government (Rating) Act 2002 and the Rating Valuations Act 1998.</li>
+  <li>In general the Council viewers derive information from variety of sources and may include intellectual property of third parties. Unless stated otherwise, all intellectual property rights in, to and in respect of the information, data and materials appearing on the site (including copyright, trade marks, trade names and logos) are and remain the property of either the Hamilton City Council or the third parties who have licensed their intellectual property to the Council. Information may only be used as permitted under the Copyright Act 1994.</li>
+</ol>
+    <h3>Continuation of Service</h3>
+<ol>
+  <li>The Council may elect to add, amend, or discontinue viewers without notice.</li>
+  <li>Council Viewers may be unavailable at times without notice due to maintenance.</li>
+</ol>
+    <h3>Property Information</h3>
+<ol>
+  <li>The property-related data provided within these viewers are not intended as a replacement for the information that is included in a Land Information Memorandum (LIM) Report.</li>
+</ol>
+    <h3>Services Information</h3>
+<ol>
+  <li>Levels, locations and dimensions of assets or features shown may not be accurate, due to circumstances not notified to Council. This information should not be used as the basis for design or works wherein a physical check should be made on all levels, locations and dimensions.</li>
+</ol>
+
+</div>
+<div style="text-align:center;">
+<input type="button" style="text-align:center;height:80px;width:300px;font-size:40px;" value="I Accept" id="continue"></input>
+<br/>
+</div>
+<div>&nbsp;</div>
+<div>&nbsp;</div>
+<div>&nbsp;</div>
+</body>
+</html>
