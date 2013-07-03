@@ -1401,11 +1401,112 @@ function addMeasurementWidget() {
 
   measure = new esri.dijit.Measurement({
     map: map,
-    id: 'measureTool'
-  }, 'measureDiv');
+    id: 'measureTool',
+    defaultAreaUnit: esri.Units.HECTARES,        // default to hectares
+    defaultLengthUnit:   esri.Units.METERS,      // default to meters
+    defaultLocationUnit: "eagleNZTM",            // custom measurement
+  }, 'measureDiv' );
 
   measure.startup();
+  //#region ========= Measure Tool Customisations ===========
 
+    // add an NZTM item to list of units we cn use
+    measure.units["eagleNZTM"] = "NZTM";
+  
+    // modify to include NZTM in list
+    measure._createLocationUnitList = function()
+    {
+        var unitMenu=new dijit.Menu( {style:"display: none;"});
+        var unitNames=esri.bundle.widgets.measurement;
+        var unitTexts=[unitNames.NLS_decimal_degrees,unitNames.NLS_deg_min_sec,"NZTM"];
+        dojo.forEach( unitTexts,
+                    dojo.hitch( this,
+                                function ( unitName, idx )
+                                {
+                                    var unitMenuItem = new dijit.MenuItem( {label: unitName,
+                                                                            onClick: dojo.hitch( this, function () { this._switchLocationUnit(unitName); })
+                                                                            });
+                                    unitMenuItem.setAttribute("class","unitDropDown");
+                                    unitMenu.addChild(unitMenuItem);
+                                }
+                            )
+                    );
+        dijit.byNode(this.unit.domNode).setAttribute("dropDown",unitMenu);
+        var defaultUnitText=this.units[measure._defaultLocationUnit];
+        dijit.byNode(this.unit.domNode).setAttribute("label",defaultUnitText);
+    }
+
+    // modified to pass positions in both coordinate systems to _outputLocationResult
+    measure._switchLocationUnit=function(labelText)
+    {
+        dijit.byNode(this.unit.domNode).setAttribute("label",labelText);
+        if (this.result===null){return;}
+        this._outputLocationResult(this.gcsLocation,this.nztmPosition,labelText);
+    }
+
+    // modified to save both native and gcs co-ordinates and pass them on to  _outputLocationResult
+    measure._showCoordinates=function(evt)
+    {
+        var snap;
+        if (this._map.snappingManager)
+        {
+            snap=this._map.snappingManager._snappingPoint;
+        }
+        this.nztmPosition=snap||evt.mapPoint;
+        this.gcsLocation = this._getGCSLocation( this.nztmPosition );
+
+        this._outputLocationResult(this.gcsLocation, this.nztmPosition,dijit.byNode(this.unit.domNode).label);
+    }
+
+    // modified to accept two sets of co-ordinates, gcs and native (NTZM). 
+    // Add handler for "NZTM" results.
+    measure._outputLocationResult=function(gcs,native,unitText)
+    {
+        if ( typeof gcs == 'undefined' ) return;
+        var x = gcs.x, y = gcs.y;
+        var lonLabel = esri.bundle.widgets.measurement.NLS_longitude + ": ",
+            latLabel = esri.bundle.widgets.measurement.NLS_latitude + ": &nbsp; ";
+
+        var lon, lat;
+        var unitNames=esri.bundle.widgets.measurement;
+        if (unitText===unitNames.NLS_decimal_degrees)
+        {
+            lon=x.toFixed(6);
+            lat=y.toFixed(6);
+        }
+        else if (unitText===unitNames.NLS_deg_min_sec)
+        {
+            var lonSign="", latSign="";
+            if (x<0)
+            {
+                lonSign="-";
+                x=Math.abs(x);
+            }
+            if (y<0)
+            {
+                latSign="-";
+                y=Math.abs(y);
+            }
+            lon = lonSign + Math.floor( x ) + "&#176; " + Math.floor(( x - Math.floor( x ) ) * 60 ) + "&#146; " + Math.floor(( ( x - Math.floor( x ) ) * 60 - Math.floor(( x - Math.floor( x ) ) * 60 ) ) * 60 ) + "&#148;";
+            lat = latSign + Math.floor( y ) + "&#176; " + Math.floor(( y - Math.floor( y ) ) * 60 ) + "&#146; " + Math.floor(( ( y - Math.floor( y ) ) * 60 - Math.floor(( y - Math.floor( y ) ) * 60 ) ) * 60 ) + "&#148;";
+        }
+        else
+        {
+            if (unitText==="NZTM")
+            {
+                lon = native.x.toFixed(0);
+                lat = native.y.toFixed(0);
+                lonLabel = "Easting: &nbsp; ";
+                latLabel = "Northing: ";
+            }
+        }
+        var rv = dijit.byNode( this.resultValue.domNode );
+        // fixes bug in OOTB measure tool where coordinates go grey if you pan the map while measuring in location mode
+        rv.domNode.disabled = false;    
+        rv.setAttribute("content",lonLabel+lon+"<br/>"+latLabel+lat);
+    }
+
+  //#endregion ========= Measure Tool Customisations ===========
 
   var toggleButton = new dijit.form.ToggleButton({
     label: i18n.tools.measure.label,
