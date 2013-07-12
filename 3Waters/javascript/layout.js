@@ -1402,9 +1402,10 @@ function addMeasurementWidget() {
   measure = new esri.dijit.Measurement({
     map: map,
     id: 'measureTool',
-    defaultAreaUnit: esri.Units.HECTARES,        // default to hectares
+    defaultAreaUnit: esri.Units.SQUARE_METERS,        // default to hectares
     defaultLengthUnit:   esri.Units.METERS,      // default to meters
     defaultLocationUnit: "eagleNZTM",            // custom measurement
+    lineSymbol: new esri.symbol.SimpleLineSymbol(esri.symbol.SimpleLineSymbol.STYLE_SOLID, new dojo.Color([255,165,0]), 2)
   }, 'measureDiv' );
 
   measure.startup();
